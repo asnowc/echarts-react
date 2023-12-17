@@ -10,13 +10,15 @@ const gitCmd = git as any;
 action.startGroup("deno output");
 
 const allTags: Set<string> = new Set(await gitCmd.tag.getRemoteTags());
+console.log(Deno.env.get("CI"));
+
 const isCI = Deno.env.get("CI") === "true";
 if (isCI) await gitCmd.setCIUser();
 
-const isAdded = await setTagIfUpdate(allTags, tag, { dryRun: isCI });
+const isAdded = await setTagIfUpdate(allTags, tag, { dryRun: !isCI });
 
-if (!isAdded) {
-  console.log("skin publish");
+if (!isAdded || !isCI) {
+  console.log("Skin publish" + (isCI ? "" : " (Not CI) "));
 } else {
   execCmdSync("pnpm", ["publish"], { exitIfFail: true });
 

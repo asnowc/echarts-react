@@ -19,12 +19,12 @@ jobs:
       - name: Build
         run: deno task build
 
-      - name: Setup Pnpm
-        uses: pnpm/action-setup@v2
+      - uses: asnowc/actions@setup-node/v2
         with:
-          version: 8
+          node_v: 20
+          pnpm_v: 8
       - name: Publish
         if: ${{ github.ref_name=='main'}}
-        run: deno run -A .github/scripts/publish.ts
+        run: deno run -A --no-lock .github/scripts/publish.ts
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
