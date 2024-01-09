@@ -14,12 +14,12 @@ const EchartsComp = React.forwardRef(function Echarts(props: EchartsProps, ref: 
 
 /** When the theme or initOption changes (shallow comparison), reinitialize Echarts */
 export function useEchartsRef(domRef: React.RefObject<HTMLElement | null>, config: UseEchartsOption = {}) {
-  const { lazyUpdate, fixedSize, loading, option } = config;
+  const { fixedSize, loading, option } = config;
   const chartRef = useRef<ECharts>();
 
   const realTheme = useCompareValue(config.theme);
   const realInitOption = useCompareValue(config.init);
-  useLayoutEffect(refreshOption, [option, config.lazyUpdate]);
+  useLayoutEffect(refreshOption, [option]);
   useLayoutEffect(refreshLoading, [loading]);
   useLayoutEffect(() => {
     if (!domRef.current) return console.error("Unable to get DOM instance");
@@ -41,7 +41,7 @@ export function useEchartsRef(domRef: React.RefObject<HTMLElement | null>, confi
 
   function refreshOption() {
     if (!chartRef.current) return;
-    chartRef.current.setOption(option ?? {}, true, lazyUpdate);
+    chartRef.current.setOption(option ?? {}, true, false);
   }
   function refreshLoading() {
     const chart = chartRef.current;
@@ -82,8 +82,7 @@ export interface UseEchartsOption {
   theme?: string | object; //check
   init?: EChartsInitOpts; //check
   option?: EChartsOption;
-  /** 在设置完 option 后是否不立即更新图表，默认为 false，即同步立即更新。如果为 true，则会在下一个 animation frame 中，才更新图表。 */
-  lazyUpdate?: boolean;
+
   loading?: boolean;
   /** 固定渲染大小;  默认会自动监听 window resize 事件, 自动调用 Echarts.resize(); 设置为true将不会监听 */
   fixedSize?: boolean;
