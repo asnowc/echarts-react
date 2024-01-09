@@ -1,11 +1,11 @@
 import * as echarts from "echarts";
 import React, { CSSProperties, useImperativeHandle, useRef, useCallback, useLayoutEffect, useMemo } from "react";
-import type { EChartsOption, ECharts } from "echarts";
-export type { EChartsOption, ECharts } from "echarts";
+import type { EChartsOption, ECharts as EChartsInstance } from "echarts";
+export type { EChartsOption } from "echarts";
 
-const EchartsComp = React.forwardRef(function Echarts(props: EchartsProps, ref: React.ForwardedRef<ECharts>) {
+const EChartsComp = React.forwardRef(function Echarts(props: EChartsProps, ref: React.ForwardedRef<EChartsInstance>) {
   const domRef = useRef<HTMLDivElement>(null);
-  const chartsRef = useEchartsRef(domRef, props);
+  const chartsRef = useEChartsRef(domRef, props);
 
   useImperativeHandle(ref, () => chartsRef.current!, [chartsRef.current]);
 
@@ -13,9 +13,9 @@ const EchartsComp = React.forwardRef(function Echarts(props: EchartsProps, ref: 
 });
 
 /** When the theme or initOption changes (shallow comparison), reinitialize Echarts */
-export function useEchartsRef(domRef: React.RefObject<HTMLElement | null>, config: UseEchartsOption = {}) {
+export function useEChartsRef(domRef: React.RefObject<HTMLElement | null>, config: UseEchartsOption = {}) {
   const { fixedSize, loading, option } = config;
-  const chartRef = useRef<ECharts>();
+  const chartRef = useRef<EChartsInstance>();
 
   const realTheme = useCompareValue(config.theme);
   const realInitOption = useCompareValue(config.init);
@@ -53,7 +53,8 @@ export function useEchartsRef(domRef: React.RefObject<HTMLElement | null>, confi
   return chartRef;
 }
 
-export const Echarts = React.memo(EchartsComp);
+export const ECharts = React.memo(EChartsComp);
+export type ECharts = EChartsInstance;
 function useCompareValue<T>(value: T): T {
   const before = useRef(value);
   return useMemo(() => {
@@ -87,6 +88,6 @@ export interface UseEchartsOption {
   /** 固定渲染大小;  默认会自动监听 window resize 事件, 自动调用 Echarts.resize(); 设置为true将不会监听 */
   fixedSize?: boolean;
 }
-export type EchartsProps = UseEchartsOption & {
+export type EChartsProps = UseEchartsOption & {
   style?: CSSProperties;
 };

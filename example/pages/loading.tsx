@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Echarts } from "@/echarts.tsx";
+import { ECharts } from "@/echarts.tsx";
 import option from "./option.ts";
 
 export default function App() {
@@ -9,5 +9,5 @@ export default function App() {
     setTimeout(() => setLoading(false), 2000);
   }, []);
 
-  return <Echarts option={option} loading={loading} style={{ height: 400 }} />;
+  return <ECharts option={option} loading={loading} style={{ height: 400 }} />;
 }

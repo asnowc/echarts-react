@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { Echarts, EChartsOption } from "@/echarts.tsx";
+import { ECharts, EChartsOption } from "@/echarts.tsx";
 
 export default function App() {
   const [num, setNum] = useState(1);
@@ -27,7 +27,7 @@ export default function App() {
 
   return (
     <div>
-      <Echarts option={option} style={{ height: 400 }} />
+      <ECharts option={option} style={{ height: 400 }} />
       <button onClick={onClick}>add</button>
     </div>
   );

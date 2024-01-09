@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Echarts } from "@/echarts.tsx";
+import { ECharts } from "@/echarts.tsx";
 import option from "./option.ts";
 
 export default function App() {
@@ -11,7 +11,7 @@ export default function App() {
   }
   return (
     <div>
-      <Echarts option={option} style={{ height: 400 }} theme={theme} />
+      <ECharts option={option} style={{ height: 400 }} theme={theme} />
       <button onClick={onClick}>switch</button>
     </div>
   );

@@ -20,7 +20,7 @@ const option = {
 
 ```tsx
 import React, { useMemo, useState } from "react";
-import { Echarts } from "echarts-comp";
+import { ECharts } from "echarts-comp";
 
 export default function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -29,22 +29,22 @@ export default function App() {
     setTimeout(() => setLoading(false), 2000);
   }, []);
 
-  return <Echarts option={option} loading={loading} style={{ height: 400 }} theme="dark" />;
+  return <ECharts option={option} loading={loading} style={{ height: 400 }} theme="dark" />;
 }
 ```
 
 ### 组件参数
 
 ```ts
-interface UseEchartsOption {
+interface UseEChartsOption {
   theme?: string | object;
-  /** 对应 echarts.init() 的参数 */
+  /** 对应 ECharts.init() 的参数 */
   init?: EChartsInitOpts;
 
-  /** 对应 echarts.setOption() 的参数 */
+  /** 对应 ECharts.setOption() 的参数 */
   option?: EChartsOption;
   loading?: boolean;
-  /** 固定渲染大小;  默认会自动监听 window resize 事件, 自动调用 Echarts.resize(); 设置为 true 将不会监听 */
+  /** 固定渲染大小;  默认会自动监听 window resize 事件, 自动调用 ECharts.resize(); 设置为 true 将不会监听 */
   fixedSize?: boolean;
 }
 ```
