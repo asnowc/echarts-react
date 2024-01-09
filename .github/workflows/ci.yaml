@@ -1,4 +1,4 @@
-name: ci
+name: CI
 on:
   push:
     branches:
@@ -7,8 +7,6 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -16,19 +14,37 @@ jobs:
         uses: denoland/setup-deno@v1
         with:
           deno-version: v1.x
+      - name: Check tag
+        if: ${{ github.ref_name=='main'}}
+        id: check_tag
+        uses: asnowc/actions@deno-script/v1
+        with:
+          script: |
+            import { writeNewTagToOutput } from "https://cdn.jsdelivr.net/gh/dnpack/action-script@0.3.x/cmd/github_repo.ts";
+            const str = await Deno.readTextFile("./package.json");
+            const version = JSON.parse(str).version;
+            await writeNewTagToOutput("v" + version, "return");
+          args: -A
       - name: Build
+        if: ${{steps.check_tag.outputs.return}}
         run: deno task build
 
-      - name: Setup Pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
       - name: Setup NodeJS
+        if: ${{steps.check_tag.outputs.return}}
         uses: actions/setup-node@v3
         with:
           node-version: 20
       - name: Publish
-        if: ${{ github.ref_name=='main'}}
-        run: deno run -A --no-lock .github/scripts/publish.ts
+        if: ${{steps.check_tag.outputs.return}}
+        uses: asnowc/actions@deno-script/v1
+        with:
+          script: |
+            import { tagPublishFlow } from "https://cdn.jsdelivr.net/gh/dnpack/action-script@0.3.x/cmd/github_repo.ts";
+            import { execCmdSync } from "https://cdn.jsdelivr.net/gh/dnpack/action-script@0.3.x/lib.ts";
+
+            await tagPublishFlow("NEW_TAG", () => execCmdSync("npm", ["publish"], { exitIfFail: true }));
+          args: -A
         env:
+          NEW_TAG: ${{steps.check_tag.outputs.return}}
+          GITHUB_TOKEN: ${{secrets.CI_GITHUB_TOKEN}}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
