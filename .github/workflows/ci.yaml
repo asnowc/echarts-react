@@ -19,16 +19,18 @@ jobs:
         uses: asnowc/actions@check-tags/v1
         with:
           file: package.json
-      - name: Build
-        if: ${{steps.check_tag.outputs.tags}}
-        run: deno task build
 
       - name: Setup NodeJS
         if: ${{steps.check_tag.outputs.tags}}
-        uses: actions/setup-node@v3
+        uses: asnowc/actions@setup-node/v2
         with:
-          node-version: 20
-          registry-url: https://registry.npmjs.org
+          node_v: 20
+          pnpm_v: 8
+          run_install: true
+      - name: Build
+        if: ${{steps.check_tag.outputs.tags}}
+        run: pnpm run ci:build
+
       - name: Publish
         if: ${{steps.check_tag.outputs.tags}}
         uses: asnowc/actions@deno-script/v1

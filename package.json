@@ -13,7 +13,7 @@
   },
   "scripts": {
     "dev": "deno run -A npm:vite",
-    "build": "rollup -c"
+    "ci:build": "rollup -c"
   },
   "repository": {
     "type": "git",
