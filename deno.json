@@ -1,5 +1,6 @@
 {
   "nodeModulesDir": false,
+  "lock": false,
   "compilerOptions": {
     "lib": ["dom", "esnext", "deno.window"]
   },
