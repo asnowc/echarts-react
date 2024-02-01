@@ -1,5 +1,13 @@
 import * as echarts from "echarts";
-import React, { CSSProperties, useImperativeHandle, useRef, useCallback, useLayoutEffect, useMemo } from "react";
+import React, {
+  CSSProperties,
+  useImperativeHandle,
+  useRef,
+  ForwardRefExoticComponent,
+  useCallback,
+  useLayoutEffect,
+  useMemo,
+} from "react";
 import type { EChartsOption, ECharts as EChartsInstance } from "echarts";
 export type { EChartsOption } from "echarts";
 
@@ -52,8 +60,7 @@ export function useEChartsRef(domRef: React.RefObject<HTMLElement | null>, confi
   }
   return chartRef;
 }
-
-export const ECharts = React.memo(EChartsComp);
+export const ECharts: ForwardRefExoticComponent<EChartsProps> = React.memo(EChartsComp);
 export type ECharts = EChartsInstance;
 function useCompareValue<T>(value: T): T {
   const before = useRef(value);
