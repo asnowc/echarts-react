@@ -2,7 +2,7 @@
   "name": "echarts-comp",
   "description": "Apache Echarts components for React",
   "authors": "Eavid",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "main": "dist/echarts.cjs",
   "module": "dist/echarts.js",
