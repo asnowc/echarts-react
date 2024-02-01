@@ -60,7 +60,7 @@ export function useEChartsRef(domRef: React.RefObject<HTMLElement | null>, confi
   }
   return chartRef;
 }
-export const ECharts: ForwardRefExoticComponent<EChartsProps> = React.memo(EChartsComp);
+export const ECharts = React.memo(EChartsComp);
 export type ECharts = EChartsInstance;
 function useCompareValue<T>(value: T): T {
   const before = useRef(value);
