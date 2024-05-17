@@ -3,13 +3,12 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "target": "ES2022",
-    "declaration": true,
     "strict": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     "jsx": "react",
-    "lib": ["DOM", "ESNext"],
-    "rootDir": "./src",
+    "lib": ["ESNext"],
     "outDir": "./dist"
   },
-  "exclude": ["node_modules"],
-  "include": ["src"]
+  "exclude": ["node_modules", "dist"]
 }

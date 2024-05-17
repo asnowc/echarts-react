@@ -1,8 +1,5 @@
-import * as echarts from "echarts";
+import { EChartsOption, ECharts as EChartsInstance, init as initEcharts, EChartsInitOpts } from "./echarts.ts";
 import React, { CSSProperties, useImperativeHandle, useRef, useCallback, useLayoutEffect, useMemo } from "react";
-import type { EChartsOption, ECharts as EChartsInstance } from "echarts";
-export type { EChartsOption } from "echarts";
-
 const EChartsComp = React.forwardRef(function Echarts(props: EChartsProps, ref: React.ForwardedRef<EChartsInstance>) {
   const domRef = useRef<HTMLDivElement>(null);
   const chartsRef = useEChartsRef(domRef, props);
@@ -24,7 +21,7 @@ export function useEChartsRef(domRef: React.RefObject<HTMLElement | null>, confi
   useLayoutEffect(() => {
     if (!domRef.current) return console.error("Unable to get DOM instance");
     chartRef.current?.dispose();
-    chartRef.current = echarts.init(domRef.current, realTheme, realInitOption);
+    chartRef.current = initEcharts(domRef.current, realTheme, realInitOption);
     refreshOption();
     refreshLoading();
     return () => chartRef.current?.dispose();
@@ -55,6 +52,7 @@ export function useEChartsRef(domRef: React.RefObject<HTMLElement | null>, confi
 
 export const ECharts = React.memo(EChartsComp);
 export type ECharts = EChartsInstance;
+export type { EChartsInitOpts, EChartsOption } from "./echarts.ts";
 function useCompareValue<T>(value: T): T {
   const before = useRef(value);
   return useMemo(() => {
@@ -78,7 +76,6 @@ function objectIsEqual(obj1: any, obj2: any) {
   return true;
 }
 
-export type EChartsInitOpts = NonNullable<Parameters<typeof echarts.init>[2]>;
 export interface UseEchartsOption {
   theme?: string | object; //check
   init?: EChartsInitOpts; //check

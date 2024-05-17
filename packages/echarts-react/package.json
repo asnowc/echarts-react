@@ -1,0 +1,36 @@
+{
+  "name": "echarts-comp",
+  "description": "Apache Echarts components for React",
+  "authors": "Eavid",
+  "version": "0.0.2",
+  "type": "module",
+  "main": "dist/echarts.cjs",
+  "module": "dist/echarts.js",
+  "types": "dist/mod.d.ts",
+  "peerDependencies": {
+    "echarts": "^5.4.3",
+    "react": "^18.2.0"
+  },
+  "scripts": {
+    "build": "pnpm rollup -c"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/asnowc/echarts-react"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "license": "MIT",
+  "keywords": [
+    "react",
+    "echarts"
+  ],
+  "files": [
+    "./dist"
+  ],
+  "devDependencies": {
+    "@eavid/lib-dev": "^0.0.3"
+  }
+}

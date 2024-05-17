@@ -1,5 +1,5 @@
 {
-  "cSpell.words": ["Echarts"],
+  "cSpell.words": ["ECharts"],
   "code-runner.executorMap": {
     "javascript": "node",
     "typescript": "deno run -A"

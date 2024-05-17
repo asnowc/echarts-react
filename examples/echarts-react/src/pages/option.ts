@@ -1,4 +1,4 @@
-import { EChartsOption } from "@/echarts.tsx";
+import { EChartsOption } from "echarts-comp";
 
 export default {
   xAxis: {

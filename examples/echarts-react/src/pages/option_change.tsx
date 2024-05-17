@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { ECharts, EChartsOption } from "@/echarts.tsx";
+import { ECharts, EChartsOption } from "echarts-comp";
 
 export default function App() {
   const [num, setNum] = useState(1);

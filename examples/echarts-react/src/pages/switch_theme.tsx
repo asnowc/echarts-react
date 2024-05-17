@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ECharts } from "@/echarts.tsx";
+import { ECharts } from "echarts-comp";
 import option from "./option.ts";
 
 export default function App() {
