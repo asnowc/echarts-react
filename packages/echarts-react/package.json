@@ -28,7 +28,9 @@
     "echarts"
   ],
   "files": [
-    "./dist"
+    "./dist",
+    "echarts.js",
+    "echarts.d.ts"
   ],
   "devDependencies": {
     "@eavid/lib-dev": "^0.0.3"
