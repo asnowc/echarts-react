@@ -3,6 +3,5 @@
   "code-runner.executorMap": {
     "javascript": "node",
     "typescript": "deno run -A"
-  },
-  "deno.enablePaths": ["./examples"]
+  }
 }
