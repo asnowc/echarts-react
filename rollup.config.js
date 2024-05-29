@@ -1,19 +1,19 @@
 import { defineConfig } from "rollup";
 import tsPlugin from "@rollup/plugin-typescript";
 export default defineConfig({
-  input: "./src/echarts.tsx",
+  input: "./src/mod.ts",
   output: [
     {
       minifyInternalExports: false,
       format: "cjs",
-      file: "dist/echarts.cjs",
+      file: "dist/mod.cjs",
     },
     {
       minifyInternalExports: false,
       format: "es",
-      file: "dist/echarts.js",
+      file: "dist/mod.js",
     },
   ],
   external: ["react", "echarts"],
-  plugins: [tsPlugin({})],
+  plugins: [tsPlugin({ declaration: true, declarationDir: "dist", rootDir: "src" })],
 });

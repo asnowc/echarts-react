@@ -4,12 +4,18 @@
   "authors": "Eavid",
   "version": "0.0.4",
   "type": "module",
-  "main": "dist/echarts.cjs",
-  "module": "dist/echarts.js",
-  "types": "dist/echarts.d.ts",
+  "main": "dist/mod.cjs",
+  "module": "dist/mod.js",
+  "types": "dist/mod.d.ts",
   "peerDependencies": {
     "echarts": "^5.4.3",
     "react": "^18.2.0"
+  },
+  "exports": {
+    ".": {
+      "require": "./dist/mod.cjs",
+      "default": "./dist/mod.js"
+    }
   },
   "scripts": {
     "dev": "deno run -A npm:vite",
@@ -33,7 +39,7 @@
   ],
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.6",
-    "@types/react": "^18.2.50",
-    "rollup": "^4.9.6"
+    "@types/react": "^18.3.3",
+    "rollup": "^4.18.0"
   }
 }
