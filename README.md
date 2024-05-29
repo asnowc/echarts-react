@@ -1,3 +1,17 @@
+[![ESM package][package]][package-url]
+[![NPM version][npm]][npm-url]
+[![Install size][size]][size-url]
+[![Build status][build]][build-url]
+
+[package]: https://img.shields.io/badge/package-ESM-ffe536.svg
+[package-url]: https://nodejs.org/api/esm.html
+[npm]: https://img.shields.io/npm/v/echarts-comp.svg
+[npm-url]: https://npmjs.com/package/echarts-comp
+[size]: https://packagephobia.com/badge?p=echarts-comp
+[size-url]: https://packagephobia.com/result?p=echarts-comp
+[build]: https://github.com/asnowc/echarts-comp/actions/workflows/ci.yaml/badge.svg?branch=main
+[build-url]: https://github.com/asnowc/echarts-comp/actions
+
 ### 使用
 
 ```js
