@@ -2,7 +2,7 @@
   "name": "echarts-comp",
   "description": "Apache Echarts components for React",
   "authors": "Eavid",
-  "version": "0.0.5",
+  "version": "0.1.0",
   "type": "module",
   "types": "dist/mod.d.ts",
   "exports": {

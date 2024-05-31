@@ -9,10 +9,26 @@
 [npm-url]: https://npmjs.com/package/echarts-comp
 [size]: https://packagephobia.com/badge?p=echarts-comp
 [size-url]: https://packagephobia.com/result?p=echarts-comp
-[build]: https://github.com/asnowc/echarts-comp/actions/workflows/ci.yaml/badge.svg?branch=main
+[build]: https://github.com/asnowc/echarts-react/actions/workflows/ci.yaml/badge.svg?branch=main
 [build-url]: https://github.com/asnowc/echarts-comp/actions
 
-### 使用
+基于 [Apache ECharts](https://github.com/apache/incubator-echarts), 重新导出了它的子模块。基于它生成的d.ts 文件，重新打包，解决了 echarts 不支持 nodeNext 模块的问题。
+
+## 重新导出
+
+echarts-comp导出了 echarts 的 charts、components、core、features、renderers 模块。以下两个示例是等价的
+
+```ts
+import * as charts from "echarts-comp";
+import * as core from "echarts-comp/core";
+```
+
+```ts
+import * as charts from "echarts";
+import * as core from "echarts/core";
+```
+
+## 使用
 
 ```js
 const option = {
@@ -34,7 +50,8 @@ const option = {
 
 ```tsx
 import React, { useMemo, useState } from "react";
-import { ECharts } from "echarts-comp";
+import { ECharts } from "echarts-comp/react";
+import "echarts-comp"; // 注册默认的所有组件。这相当于 import "echarts", 你可以按需注册.
 
 export default function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -50,7 +67,7 @@ export default function App() {
 ### 组件参数
 
 ```ts
-interface UseEChartsOption {
+interface EChartsProps {
   theme?: string | object;
   /** 对应 ECharts.init() 的参数 */
   init?: EChartsInitOpts;
@@ -60,5 +77,6 @@ interface UseEChartsOption {
   loading?: boolean;
   /** 固定渲染大小;  默认会自动监听 window resize 事件, 自动调用 ECharts.resize(); 设置为 true 将不会监听 */
   fixedSize?: boolean;
+  style?: CSSProperties;
 }
 ```

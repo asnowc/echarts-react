@@ -3,11 +3,10 @@ on:
   push:
     branches:
       - main
-      - feat/*
-      - fix/*
-
 jobs:
   build:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -45,5 +44,5 @@ jobs:
           args: -A --no-lock
         env:
           NEW_TAG: ${{steps.check_tag.outputs.tags}}
-          GITHUB_TOKEN: ${{secrets.CI_GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
