@@ -14,7 +14,7 @@
     "ci:build": "rollup -c && pnpm dts:bundle-echarts",
     "build": "rollup -c",
     "dts:check": "tsc -p tsconfig.build.json",
-    "dts:bundle-echarts": "deno run -A scripts/rollup-dts.ts"
+    "dts:bundle-echarts": "deno run --node-modules-dir=false -A scripts/rollup-dts.ts"
   },
   "repository": {
     "type": "git",
