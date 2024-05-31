@@ -8,12 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@types/react':
-        specifier: ^18.3.2
-        version: 18.3.3
-      '@types/react-dom':
-        specifier: ^18.3.0
-        version: 18.3.0
       echarts-comp:
         specifier: ../..
         version: link:../..
@@ -24,6 +18,12 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
     devDependencies:
+      '@types/react':
+        specifier: ^18.3.2
+        version: 18.3.3
+      '@types/react-dom':
+        specifier: ^18.3.0
+        version: 18.3.0
       vite:
         specifier: ^5.2.11
         version: 5.2.12
