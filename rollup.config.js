@@ -1,5 +1,6 @@
 import { defineConfig } from "rollup";
 import tsPlugin from "@rollup/plugin-typescript";
+
 export default defineConfig({
   input: "./src/mod.ts",
   output: [
@@ -15,5 +16,13 @@ export default defineConfig({
     },
   ],
   external: ["react", "echarts"],
-  plugins: [tsPlugin({ declaration: true, declarationDir: "dist", rootDir: "src" })],
+  plugins: [
+    tsPlugin({
+      compilerOptions: {
+        declaration: true,
+        declarationDir: "dist",
+        rootDir: "src",
+      },
+    }),
+  ],
 });

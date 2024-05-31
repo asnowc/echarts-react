@@ -1,18 +1,18 @@
-import { EChartsOption, ECharts as EChartsInstance, init as initEcharts } from "./echarts.ts";
+import { init as initEcharts, EChartsType, EChartsOption, EChartsInitOpts } from "echarts-comp/core";
 import React, { CSSProperties, useImperativeHandle, useRef, useCallback, useLayoutEffect, useMemo } from "react";
-const EChartsComp = React.forwardRef(function Echarts(props: EChartsProps, ref: React.ForwardedRef<EChartsInstance>) {
-  const domRef = useRef<HTMLDivElement>(null);
-  const chartsRef = useEChartsRef(domRef, props);
+const EChartsComp = React.forwardRef(function ECharts(props: EChartsProps, ref: React.ForwardedRef<EChartsType>) {
+  const { domRef, echarts } = useECharts(props);
 
-  useImperativeHandle(ref, () => chartsRef.current!, [chartsRef.current]);
+  useImperativeHandle(ref, () => echarts!, [echarts]);
 
   return <div style={props.style} ref={domRef}></div>;
 });
 
 /** When the theme or initOption changes (shallow comparison), reinitialize Echarts */
-export function useEChartsRef(domRef: React.RefObject<HTMLElement | null>, config: UseEchartsOption = {}) {
+export function useECharts(config: UseEchartsOption = {}) {
   const { fixedSize, loading, option } = config;
-  const chartRef = useRef<EChartsInstance>();
+  const domRef = useRef<HTMLDivElement>(null);
+  const chartRef = useRef<EChartsType>();
 
   const realTheme = useCompareValue(config.theme);
   const realInitOption = useCompareValue(config.init);
@@ -47,7 +47,7 @@ export function useEChartsRef(domRef: React.RefObject<HTMLElement | null>, confi
     if (loading) chart.showLoading();
     else chart.hideLoading();
   }
-  return chartRef;
+  return { domRef, echarts: chartRef.current };
 }
 
 function useCompareValue<T>(value: T): T {
@@ -74,10 +74,9 @@ function objectIsEqual(obj1: any, obj2: any) {
 }
 
 export const ECharts = React.memo(EChartsComp);
-export type ECharts = EChartsInstance;
-export type { EChartsOption };
 
-export type EChartsInitOpts = NonNullable<Parameters<typeof initEcharts>[2]>;
+export type { EChartsType, EChartsOption, EChartsInitOpts } from "echarts-comp/core";
+
 export interface UseEchartsOption {
   theme?: string | object; //check
   init?: EChartsInitOpts; //check

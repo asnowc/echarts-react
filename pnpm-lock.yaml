@@ -11,19 +11,25 @@ importers:
       echarts:
         specifier: ^5.4.3
         version: 5.5.0
+      prettier:
+        specifier: ^3.2.5
+        version: 3.2.5
       react:
         specifier: ^18.2.0
         version: 18.3.1
     devDependencies:
       '@rollup/plugin-typescript':
         specifier: ^11.1.6
-        version: 11.1.6(rollup@4.18.0)(tslib@2.3.0)(typescript@5.3.3)
+        version: 11.1.6(rollup@4.18.0)(tslib@2.6.2)(typescript@5.3.3)
       '@types/react':
         specifier: ^18.3.3
         version: 18.3.3
       rollup:
         specifier: ^4.18.0
         version: 4.18.0
+      tslib:
+        specifier: ^2.6.2
+        version: 2.6.2
 
   examples/echarts-react:
     dependencies:
@@ -365,6 +371,11 @@ packages:
     resolution: {integrity: sha512-Wglpdk03BSfXkHoQa3b/oulrotAkwrlLDRSOb9D0bN86FdRyE9lppSp33aHNPgBa0JKCoB+drFLZkQoRRYae5A==}
     engines: {node: ^10 || ^12 || >=14}
 
+  prettier@3.2.5:
+    resolution: {integrity: sha512-3/GWa9aOC0YeD7LUfvOG2NiDyhOWRvt1k+rcKhOuYnMY24iiCphgneUfJDyFXd6rZCAnuLBv6UeAULtrhT/F4A==}
+    engines: {node: '>=14'}
+    hasBin: true
+
   react-dom@18.3.1:
     resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
     peerDependencies:
@@ -396,6 +407,9 @@ packages:
 
   tslib@2.3.0:
     resolution: {integrity: sha512-N82ooyxVNm6h1riLCoyS9e3fuJ3AMG2zIZs2Gd1ATcSFjSA23Q0fzjjZeh0jbJvWVDZ0cJT8yaNNaaXHzueNjg==}
+
+  tslib@2.6.2:
+    resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
 
   typescript@5.3.3:
     resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
@@ -504,14 +518,14 @@ snapshots:
   '@esbuild/win32-x64@0.20.2':
     optional: true
 
-  '@rollup/plugin-typescript@11.1.6(rollup@4.18.0)(tslib@2.3.0)(typescript@5.3.3)':
+  '@rollup/plugin-typescript@11.1.6(rollup@4.18.0)(tslib@2.6.2)(typescript@5.3.3)':
     dependencies:
       '@rollup/pluginutils': 5.1.0(rollup@4.18.0)
       resolve: 1.22.8
       typescript: 5.3.3
     optionalDependencies:
       rollup: 4.18.0
-      tslib: 2.3.0
+      tslib: 2.6.2
 
   '@rollup/pluginutils@5.1.0(rollup@4.18.0)':
     dependencies:
@@ -650,6 +664,8 @@ snapshots:
       picocolors: 1.0.1
       source-map-js: 1.2.0
 
+  prettier@3.2.5: {}
+
   react-dom@18.3.1(react@18.3.1):
     dependencies:
       loose-envify: 1.4.0
@@ -697,6 +713,8 @@ snapshots:
   supports-preserve-symlinks-flag@1.0.0: {}
 
   tslib@2.3.0: {}
+
+  tslib@2.6.2: {}
 
   typescript@5.3.3: {}
 

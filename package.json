@@ -4,22 +4,17 @@
   "authors": "Eavid",
   "version": "0.0.5",
   "type": "module",
-  "main": "dist/mod.cjs",
-  "module": "dist/mod.js",
   "types": "dist/mod.d.ts",
-  "peerDependencies": {
-    "echarts": "^5.4.3",
-    "react": "^18.2.0"
-  },
   "exports": {
-    ".": {
-      "require": "./dist/mod.cjs",
-      "default": "./dist/mod.js"
-    }
+    "./react": "./dist/mod.js",
+    ".": "./reexports/index.js",
+    "./*": "./reexports/*.js"
   },
   "scripts": {
-    "dev": "deno run -A npm:vite",
-    "ci:build": "rollup -c"
+    "ci:build": "rollup -c && pnpm dts:bundle-echarts",
+    "build": "rollup -c",
+    "dts:check": "tsc -p tsconfig.build.json",
+    "dts:bundle-echarts": "deno run -A scripts/rollup-dts.ts"
   },
   "repository": {
     "type": "git",
@@ -35,11 +30,20 @@
     "echarts"
   ],
   "files": [
+    "./reexports",
     "./dist"
   ],
+  "peerDependencies": {
+    "echarts": "^5.4.3",
+    "react": "^18.2.0"
+  },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/react": "^18.3.3",
-    "rollup": "^4.18.0"
+    "rollup": "^4.18.0",
+    "tslib": "^2.6.2"
+  },
+  "dependencies": {
+    "prettier": "^3.2.5"
   }
 }
