@@ -1,5 +1,6 @@
 import { defineConfig } from "rollup";
 import tsPlugin from "@rollup/plugin-typescript";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
 
 export default defineConfig({
   input: "./src/mod.ts",
@@ -17,5 +18,6 @@ export default defineConfig({
         rootDir: "src",
       },
     }),
+    nodeResolve(),
   ],
 });

@@ -2,7 +2,7 @@
   "name": "echarts-comp",
   "description": "Apache Echarts components for React",
   "authors": "Eavid",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "type": "module",
   "types": "dist/mod.d.ts",
   "exports": {
@@ -11,7 +11,7 @@
     "./*": "./reexports/*.js"
   },
   "scripts": {
-    "ci:build": "rollup -c && pnpm dts:bundle-echarts",
+    "ci:build": "pnpm dts:bundle-echarts && rollup -c",
     "build": "rollup -c",
     "dts:check": "tsc -p tsconfig.build.json",
     "dts:bundle-echarts": "deno run --node-modules-dir=false -A scripts/rollup-dts.ts"
@@ -38,11 +38,11 @@
     "react": "^18.2.0"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^15.2.3",
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/react": "^18.3.3",
+    "prettier": "^3.2.5",
     "rollup": "^4.18.0",
-    "tslib": "^2.6.2",
-    "prettier": "^3.2.5"
-  },
-  "dependencies": {}
+    "tslib": "^2.6.2"
+  }
 }
