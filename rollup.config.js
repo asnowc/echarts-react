@@ -9,7 +9,7 @@ export default defineConfig({
     format: "es",
     file: "dist/mod.js",
   },
-  external: ["react", "echarts"],
+  external: ["react", "echarts", "echarts-comp/core"],
   plugins: [
     tsPlugin({
       compilerOptions: {
