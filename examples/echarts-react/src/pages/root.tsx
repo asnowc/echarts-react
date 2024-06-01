@@ -1,11 +1,13 @@
 import React, { ChangeEvent, useMemo, useState } from "react";
-import Loading from "./loading.tsx";
-import SwitchTheme from "./switch_theme.tsx";
-import OptionChange from "./option_change.tsx";
+import Loading from "./cases/loading.tsx";
+import SwitchTheme from "./cases/switch_theme.tsx";
+import OptionChange from "./cases/option_change.tsx";
+import UseEcharts from "./cases/use-echarts.tsx";
 const cases = {
   Loading: Loading,
   SwitchTheme: SwitchTheme,
   OptionChange: OptionChange,
+  UseEcharts,
 };
 
 export function App() {

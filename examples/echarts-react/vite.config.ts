@@ -10,4 +10,7 @@ const imports = {
 
 export default {
   root: ".",
+  resolve: {
+    alias: [{ find: "echarts-comp/react", replacement: dir + "/node_modules/echarts-comp/src/mod.ts" }],
+  },
 } as UserConfig;

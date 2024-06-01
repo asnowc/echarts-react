@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
+    "strict": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "jsx": "react",
+    "lib": ["ESNext", "DOM"],
+    "rootDir": ".",
+    "outDir": "./dist"
+  },
+  "exclude": ["node_modules"]
+}
