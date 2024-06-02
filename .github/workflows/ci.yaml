@@ -31,7 +31,9 @@ jobs:
       - name: Build
         if: ${{steps.check_tag.outputs.tags}}
         run: pnpm run ci:build
-
+      - name: Text
+        if: ${{steps.check_tag.outputs.tags}}
+        run: pnpm run ci:test
       - name: Publish
         if: ${{steps.check_tag.outputs.tags}}
         uses: asnowc/actions@deno-script/v1
