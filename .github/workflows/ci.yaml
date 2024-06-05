@@ -31,7 +31,7 @@ jobs:
       - name: Build
         if: ${{steps.check_tag.outputs.tags}}
         run: pnpm run ci:build
-      - name: Text
+      - name: Test
         if: ${{steps.check_tag.outputs.tags}}
         run: pnpm run ci:test
       - name: Publish
