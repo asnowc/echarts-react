@@ -3,7 +3,7 @@ import { useECharts } from "echarts-comp/react";
 import option from "../option.ts";
 
 export default function App() {
-  const domRef = useECharts({
+  const { chartElement, echarts, resize } = useECharts({
     option,
     loading: true,
     onChange(echarts, old) {
@@ -11,5 +11,5 @@ export default function App() {
     },
   });
 
-  return <div style={{ height: 400 }} ref={domRef} />;
+  return <div style={{ height: 400 }}>{chartElement}</div>;
 }

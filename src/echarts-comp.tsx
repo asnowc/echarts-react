@@ -1,22 +1,28 @@
 import { init as initEcharts, EChartsType, EChartsOption, EChartsInitOpts } from "echarts-comp/core";
-import React, { CSSProperties, useRef, useCallback, useLayoutEffect, memo } from "react";
+import React, { CSSProperties, useRef, useCallback, useLayoutEffect, memo, useState, useEffect, useMemo } from "react";
 export const ECharts = memo(function ECharts(props: EChartsProps) {
-  const domRef = useECharts(props);
-  return <div style={props.style} ref={domRef}></div>;
+  const resizeDeps = props.resizeDep ?? [];
+  const { chartElement, echarts, resize } = useECharts(props);
+  useMemo(resize, resizeDeps);
+  return chartElement;
 });
 
 /** When the theme or initOption changes (shallow comparison), reinitialize Echarts */
-export function useECharts(config: UseEchartsOption = {}) {
-  const { fixedSize, loading, onChange, option, init, theme } = config;
+export function useECharts(config: EChartsProps = {}) {
+  const { fixedSize, loading, onChange, option, init, theme, style } = config;
   const domRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<EChartsType>();
+  const [echarts, setEcharts] = useState<EChartsType>();
 
   const needInit = useEchartsNeedInit(init);
   const oldOption = useOldValue(config.option);
+
+  //update options
   useLayoutEffect(() => {
     if (!chartRef.current || objectIsEqual(oldOption, option)) return;
     updateEchartsOption(chartRef.current, option ?? {});
   });
+  //update loading
   useLayoutEffect(refreshLoading, [loading]);
   useLayoutEffect(() => {
     if (!domRef.current) {
@@ -28,19 +34,33 @@ export function useECharts(config: UseEchartsOption = {}) {
     chartRef.current = instance;
     option && updateEchartsOption(instance, option);
     refreshLoading();
+    setEcharts(instance);
 
     onChange?.(instance, oldInstance);
     return () => instance.dispose();
   }, [theme, needInit]);
 
-  const onWindowResize = useCallback((ev: UIEvent) => chartRef.current?.resize(), []);
-  //resize
-  useLayoutEffect(() => {
-    if (fixedSize) window.removeEventListener("resize", onWindowResize);
-    else window.addEventListener("resize", onWindowResize);
+  //listen resize
+  useEffect(() => {
+    if (!fixedSize) {
+      const onResize = () => {
+        if (timeRef.current !== undefined) return;
 
-    return () => window.removeEventListener("resize", onWindowResize);
+        timeRef.current = setTimeout(() => {
+          timeRef.current = undefined;
+          resize();
+        }, 40);
+      };
+      window.addEventListener("resize", onResize);
+      return () => {
+        //Maybe "Instance xxx has been disposed"
+        if (timeRef.current !== undefined) clearTimeout(timeRef.current);
+        window.removeEventListener("resize", onResize);
+      };
+    }
   }, [fixedSize]);
+
+  const timeRef = useRef<number>();
 
   function refreshLoading() {
     const chart = chartRef.current;
@@ -49,7 +69,22 @@ export function useECharts(config: UseEchartsOption = {}) {
     if (loading) chart.showLoading();
     else chart.hideLoading();
   }
-  return domRef;
+  const resize = useCallback(() => {
+    const echarts = chartRef.current;
+    if (!echarts) return;
+    const parent = domRef.current?.parentElement;
+    if (parent) {
+      echarts.resize({ width: parent.clientWidth, height: parent.clientHeight });
+    } else echarts.resize();
+  }, []);
+
+  const chartElement = (
+    <div style={{ height: "100%", ...style, overflow: "hidden" }}>
+      <div ref={domRef} style={{ height: "100%" }} />
+    </div>
+  );
+
+  return { chartElement, echarts, resize };
 }
 function updateEchartsOption(instance: EChartsType, opts: EChartsOption) {
   instance.setOption(opts ?? {}, true, false);
@@ -90,8 +125,9 @@ export interface UseEchartsOption {
   theme?: string | object; //check
   /** echarts 初始化配置，变更会导致 echarts 变化 */
   init?: EChartsInitOpts; //check
+  /** echarts.setOption(option,true,false) */
   option?: EChartsOption;
-
+  /** echarts loading 状态 */
   loading?: boolean;
   /** 固定渲染大小;  默认会自动监听 window resize 事件, 自动调用 Echarts.resize(); 设置为true将不会监听 */
   fixedSize?: boolean;
@@ -103,4 +139,6 @@ export interface UseEchartsOption {
 }
 export type EChartsProps = UseEchartsOption & {
   style?: CSSProperties;
+  /** 依赖变化会触发 echarts.resize() */
+  resizeDep?: any[];
 };

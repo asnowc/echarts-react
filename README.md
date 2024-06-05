@@ -28,7 +28,7 @@ import * as charts from "echarts";
 import * as core from "echarts/core";
 ```
 
-## 使用
+## React 使用
 
 ```js
 const option = {
@@ -68,15 +68,22 @@ export default function App() {
 
 ```ts
 interface EChartsProps {
-  theme?: string | object;
-  /** 对应 ECharts.init() 的参数 */
-  init?: EChartsInitOpts;
-
-  /** 对应 ECharts.setOption() 的参数 */
+  /** echarts 主题，变更会导致 echarts 变化 */
+  theme?: string | object; //check
+  /** echarts 初始化配置，变更会导致 echarts 变化 */
+  init?: EChartsInitOpts; //check
   option?: EChartsOption;
+
   loading?: boolean;
-  /** 固定渲染大小;  默认会自动监听 window resize 事件, 自动调用 ECharts.resize(); 设置为 true 将不会监听 */
+  /** 固定渲染大小;  默认会自动监听 window resize 事件, 自动调用 Echarts.resize(); 设置为true将不会监听 */
   fixedSize?: boolean;
+  /**
+   * Echarts 实例发生变化时触发
+   * @param oldInstance - 如果不存在，说明是第一次初始化
+   */
+  onChange?: (echarts: EChartsType, oldInstance?: EChartsType) => void;
+  /** 依赖变化会触发 resize */
+  resizeDep?: any[];
   style?: CSSProperties;
 }
 ```
