@@ -1,44 +1,56 @@
-import { init as initEcharts, EChartsType, EChartsOption, EChartsInitOpts } from "echarts-comp/core";
-import React, { CSSProperties, useRef, useCallback, useLayoutEffect, memo, useState, useEffect, useMemo } from "react";
+import { init as initEcharts, EChartsType, EChartsOption, EChartsInitOpts, registerLocale } from "echarts-comp/core";
+import React, { CSSProperties, useRef, useCallback, useLayoutEffect, memo, useEffect, useMemo } from "react";
 export const ECharts = memo(function ECharts(props: EChartsProps) {
   const resizeDeps = props.resizeDep ?? [];
-  const { chartElement, echarts, resize } = useECharts(props);
-  useMemo(resize, resizeDeps);
+  const { chartElement, echarts, resize } = useECharts(
+    props.theme ? { ...props, init: { theme: props.theme, ...props.init } } : props
+  );
+  useEffect(resize, resizeDeps);
   return chartElement;
 });
 
 /** When the theme or initOption changes (shallow comparison), reinitialize Echarts */
-export function useECharts(config: EChartsProps = {}) {
-  const { fixedSize, loading, onChange, option, init, theme, style } = config;
-  const domRef = useRef<HTMLDivElement>(null);
+export function useECharts(config: UseEchartsOption = {}) {
+  const { fixedSize, loading, onChange, option, init, style } = config;
   const chartRef = useRef<EChartsType>();
-  const [echarts, setEcharts] = useState<EChartsType>();
-
-  const needInit = useEchartsNeedInit(init);
+  const needInit = useEchartsNeedInit(init); // 浅比较
   const oldOption = useOldValue(config.option);
+
+  const dom: HTMLDivElement = useMemo(() => {
+    const dom = document.createElement("div");
+    dom.style.overflow = "hidden";
+    dom.style.height = "100%";
+    return dom;
+  }, []);
+  const echarts = useMemo(() => {
+    const oldInstance = chartRef.current;
+
+    let echarts: EChartsType;
+    if (oldInstance) {
+      const oldOptions = oldInstance.getOption();
+      oldInstance.dispose();
+      echarts = initEcharts(dom, init?.theme, init); //auto
+      echarts.setOption(oldOptions, { lazyUpdate: true });
+    } else {
+      echarts = initEcharts(dom, init?.theme, { ...init, width: 1, height: 1 });
+    }
+    chartRef.current = echarts;
+    onChange?.(echarts, oldInstance);
+    return echarts;
+  }, [needInit]);
 
   //update options
   useLayoutEffect(() => {
-    if (!chartRef.current || objectIsEqual(oldOption, option)) return;
-    updateEchartsOption(chartRef.current, option ?? {});
+    if (objectIsEqual(oldOption, option)) return;
+    updateEchartsOption(echarts, option ?? {});
   });
   //update loading
   useLayoutEffect(refreshLoading, [loading]);
-  useLayoutEffect(() => {
-    if (!domRef.current) {
-      console.error("Unable to get DOM instance");
-    }
-    const oldInstance = chartRef.current;
-    oldInstance?.dispose();
-    const instance = initEcharts(domRef.current, theme, init);
-    chartRef.current = instance;
-    option && updateEchartsOption(instance, option);
-    refreshLoading();
-    setEcharts(instance);
 
-    onChange?.(instance, oldInstance);
-    return () => instance.dispose();
-  }, [theme, needInit]);
+  //unmount
+  useLayoutEffect(() => {
+    return () => chartRef.current!.dispose();
+  }, []);
 
   //listen resize
   useEffect(() => {
@@ -70,24 +82,29 @@ export function useECharts(config: EChartsProps = {}) {
     else chart.hideLoading();
   }
   const resize = useCallback(() => {
-    const echarts = chartRef.current;
-    if (!echarts) return;
-    const parent = domRef.current?.parentElement;
-    if (parent) {
-      echarts.resize({ width: parent.clientWidth, height: parent.clientHeight });
-    } else echarts.resize();
+    const echarts = chartRef.current!;
+    const parent = dom.parentNode;
+    if (!parent) return;
+
+    echarts.resize({ width: dom.clientWidth, height: dom.clientHeight });
   }, []);
 
-  const chartElement = (
-    <div style={{ height: "100%", ...style, overflow: "hidden" }}>
-      <div ref={domRef} style={{ height: "100%" }} />
-    </div>
-  );
+  const onDomReady = useCallback((container: HTMLDivElement | null) => {
+    if (container) {
+      container.appendChild(dom);
+      resize();
+    } else {
+      //容器被卸载
+      dom.parentNode?.removeChild(dom);
+    }
+  }, []);
 
-  return { chartElement, echarts, resize };
+  const chartElement = <div ref={onDomReady} style={{ height: "100%", ...style }}></div>;
+
+  return { chartElement, echarts, resize, isReady: () => Boolean(dom.parentElement) };
 }
 function updateEchartsOption(instance: EChartsType, opts: EChartsOption) {
-  instance.setOption(opts ?? {}, true, false);
+  instance.setOption(opts ?? {}, true, true);
 }
 function useOldValue<T>(value: T) {
   const ref = useRef<T>();
@@ -120,17 +137,18 @@ function objectIsEqual(obj1: any, obj2: any) {
 
 export type { EChartsType, EChartsOption, EChartsInitOpts } from "echarts-comp/core";
 
+export type EChartLocaleObject = Parameters<typeof registerLocale>[1];
+
 export interface UseEchartsOption {
-  /** echarts 主题，变更会导致 echarts 变化 */
-  theme?: string | object; //check
-  /** echarts 初始化配置，变更会导致 echarts 变化 */
-  init?: EChartsInitOpts; //check
+  /** echarts 初始化配置，变更(浅比较)会导致 echarts 实例变化 */
+  init?: Omit<EChartsInitOpts, "width" | "height"> & { theme?: string | object }; //check
   /** echarts.setOption(option,true,false) */
   option?: EChartsOption;
   /** echarts loading 状态 */
   loading?: boolean;
   /** 固定渲染大小;  默认会自动监听 window resize 事件, 自动调用 Echarts.resize(); 设置为true将不会监听 */
   fixedSize?: boolean;
+  style?: CSSProperties;
   /**
    * Echarts 实例发生变化时触发
    * @param oldInstance - 如果不存在，说明是第一次初始化
@@ -138,7 +156,8 @@ export interface UseEchartsOption {
   onChange?: (echarts: EChartsType, oldInstance?: EChartsType) => void;
 }
 export type EChartsProps = UseEchartsOption & {
-  style?: CSSProperties;
   /** 依赖变化会触发 echarts.resize() */
   resizeDep?: any[];
+  /** @deprecated 属性已移至 init.theme */
+  theme?: string;
 };

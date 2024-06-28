@@ -1,10 +1,8 @@
 import { Mock, beforeEach, expect, test, vi } from "vitest";
-import { render, screen, renderHook } from "@testing-library/react";
-import { userEvent } from "@testing-library/user-event";
-import { ECharts, useECharts } from "echarts-comp/react";
+import { render } from "@testing-library/react";
+import { ECharts } from "echarts-comp/react";
 import React from "react";
 import * as echarts from "echarts-comp/core";
-import { EChartsType } from "echarts-comp/core";
 const echartsFactory: Mock = (echarts as any).init;
 vi.mock("echarts-comp/core", () => {
   return {
@@ -20,21 +18,17 @@ test("init-theme浅比较", () => {
 
   const calls = onChange.mock.calls;
 
-  const hd = render(<ECharts onChange={onChange} init={{ width: 200 }} />);
+  const hd = render(<ECharts onChange={onChange} init={{ locale: "zh" }} />);
   expect(onChange).toBeCalledTimes(1);
   expect(calls[0][1]).toBeUndefined();
 
-  hd.rerender(<ECharts onChange={onChange} init={{ width: 200 }} />); //init 浅比较
+  hd.rerender(<ECharts onChange={onChange} init={{ locale: "zh" }} />); //init 浅比较
 
   expect(onChange).toBeCalledTimes(1);
 
   hd.rerender(<ECharts onChange={onChange} init={{}} />); //init 浅比较
   expect(onChange).toBeCalledTimes(2);
   expect(calls[1][1], "old 与 new ").toBe(calls[0][0]);
-
-  hd.rerender(<ECharts onChange={onChange} init={{}} theme="dark" />); //init 浅比较
-
-  expect(onChange).toBeCalledTimes(3);
 });
 test("options", () => {
   const mockInstance = createEchartsInstanceMock();
@@ -60,6 +54,8 @@ function createEchartsInstanceMock() {
     showLoading: vi.fn() as any,
     hideLoading: vi.fn(),
     dispose: vi.fn(),
+    resize: vi.fn(),
+    getOption: vi.fn(() => ({})),
   };
   return mockInstance;
 }

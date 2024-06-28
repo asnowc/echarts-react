@@ -68,10 +68,17 @@ export default function App() {
 
 ```ts
 interface EChartsProps {
-  /** echarts 主题，变更会导致 echarts 变化 */
-  theme?: string | object; //check
-  /** echarts 初始化配置，变更会导致 echarts 变化 */
-  init?: EChartsInitOpts; //check
+  /** echarts 初始化配置，变更(浅比较)会导致 echarts 实例变化 */
+  init?: {
+    locale?: string | LocaleOption;
+    renderer?: RendererType;
+    devicePixelRatio?: number;
+    useDirtyRect?: boolean;
+    useCoarsePointer?: boolean;
+    pointerSize?: number;
+    ssr?: boolean;
+    theme?: string;
+  };
   option?: EChartsOption;
 
   loading?: boolean;
@@ -85,5 +92,8 @@ interface EChartsProps {
   /** 依赖变化会触发 resize */
   resizeDep?: any[];
   style?: CSSProperties;
+
+  /** @deprecated 属性已移至 init.theme */
+  theme?: string;
 }
 ```
