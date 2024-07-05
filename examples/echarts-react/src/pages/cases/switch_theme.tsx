@@ -11,7 +11,7 @@ export default function App() {
   }
   return (
     <div>
-      <ECharts option={option} style={{ height: 400 }} theme={theme} />
+      <ECharts option={option} style={{ height: 400 }} init={{ theme }} />
       <button onClick={onClick}>switch</button>
     </div>
   );

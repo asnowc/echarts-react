@@ -92,8 +92,5 @@ interface EChartsProps {
   /** 依赖变化会触发 resize */
   resizeDep?: any[];
   style?: CSSProperties;
-
-  /** @deprecated 属性已移至 init.theme */
-  theme?: string;
 }
 ```

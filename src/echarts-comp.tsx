@@ -2,9 +2,7 @@ import { init as initEcharts, EChartsType, EChartsOption, EChartsInitOpts, regis
 import React, { CSSProperties, useRef, useCallback, useLayoutEffect, memo, useEffect, useMemo } from "react";
 export const ECharts = memo(function ECharts(props: EChartsProps) {
   const resizeDeps = props.resizeDep ?? [];
-  const { chartElement, echarts, resize } = useECharts(
-    props.theme ? { ...props, init: { theme: props.theme, ...props.init } } : props
-  );
+  const { chartElement, echarts, resize } = useECharts(props);
   useEffect(resize, resizeDeps);
   return chartElement;
 });
@@ -157,6 +155,4 @@ export interface UseEchartsOption {
 export type EChartsProps = UseEchartsOption & {
   /** 依赖变化会触发 echarts.resize() */
   resizeDep?: any[];
-  /** @deprecated 属性已移至 init.theme */
-  theme?: string;
 };
