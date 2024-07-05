@@ -9,7 +9,10 @@
     "jsx": "react",
     "lib": ["ESNext", "DOM"],
     "rootDir": ".",
-    "outDir": "./dist"
+    "outDir": "./dist",
+    "paths": {
+      "echarts-comp/react": ["./node_modules/echarts-comp/src/mod.ts"]
+    }
   },
   "exclude": ["node_modules"]
 }

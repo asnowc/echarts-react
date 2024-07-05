@@ -8,7 +8,12 @@ export const ECharts = memo(function ECharts(props: EChartsProps) {
   useEffect(resize, resizeDeps);
   return chartElement;
 });
-
+function createEchartsDom() {
+  const dom = document.createElement("div");
+  dom.style.overflow = "hidden";
+  dom.style.height = "100%";
+  return dom;
+}
 /** When the theme or initOption changes (shallow comparison), reinitialize Echarts */
 export function useECharts(config: UseEchartsOption = {}) {
   const { fixedSize, loading, onChange, option, init, style } = config;
@@ -16,21 +21,15 @@ export function useECharts(config: UseEchartsOption = {}) {
   const needInit = useEchartsNeedInit(init); // 浅比较
   const oldOption = useOldValue(config.option);
 
-  const dom: HTMLDivElement = useMemo(() => {
-    const dom = document.createElement("div");
-    dom.style.overflow = "hidden";
-    dom.style.height = "100%";
-    return dom;
-  }, []);
+  const dom: HTMLDivElement = useMemo(createEchartsDom, []);
   const echarts = useMemo(() => {
     const oldInstance = chartRef.current;
 
     let echarts: EChartsType;
     if (oldInstance) {
-      const oldOptions = oldInstance.getOption();
       oldInstance.dispose();
       echarts = initEcharts(dom, init?.theme, init); //auto
-      echarts.setOption(oldOptions, { lazyUpdate: true });
+      oldOption && echarts.setOption(oldOption, { lazyUpdate: true });
     } else {
       echarts = initEcharts(dom, init?.theme, { ...init, width: 1, height: 1 });
     }

@@ -13,4 +13,8 @@ export default {
   resolve: {
     alias: [{ find: "echarts-comp/react", replacement: dir + "/node_modules/echarts-comp/src/mod.ts" }],
   },
+
+  optimizeDeps: {
+    exclude: ["echarts-comp/react"],
+  },
 } as UserConfig;
